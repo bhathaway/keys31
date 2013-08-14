@@ -199,6 +199,8 @@ void loopDevice(struct mtdev & dev, int fd, struct input_event & ev,
     }
 }
 
+const char device_path[] = "/dev/input/by-id/usb-Atmel_Atmel_maXTouch_Digitizer-event-if00";
+
 int runPlayer()
 {
     initKeys();
@@ -216,7 +218,7 @@ int runPlayer()
         
         // Next thing to do is define the main loop for watching the 
         // touch events.
-        int touch_device = open("/dev/input/event5", O_RDONLY | O_NONBLOCK);
+        int touch_device = open(device_path, O_RDONLY | O_NONBLOCK);
         if (touch_device < 0) {
             fprintf(stderr, "error: could not open device\n");
             return -1;
