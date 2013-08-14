@@ -1,0 +1,7 @@
+- My graphics card cannot do one channel audio, so be sure to set
+  "nchnls = 2" in the CsInstruments header.
+- The correct g++ compiler flags to use are: -DUSE_DOUBLE -lcsound64 -lcsnd. In
+  particular, chnget didn't work when I omitted USE_DOUBLE macro.
+- To get real-time audio working, I need the following options send to csound,
+  which I could put in the CsOptions section of a .csd file:
+  -d -+rtaudio=alsa -o dac:hw:0,0
