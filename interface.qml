@@ -7,7 +7,7 @@ Rectangle {
 
     Image {
         source: "interface.svg"
-        width: 1900
-        height: 852
+        width: 1920
+        height: 1080
     }
 }

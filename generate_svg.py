@@ -2,6 +2,7 @@ import math
 
 f = open('interface.svg', 'w')
 scale_correction = 142.0
+key_width = (6.5/15.5)*scale_correction
 octave_length=6.5 * scale_correction
 total_height =6.0 * scale_correction
 
@@ -57,18 +58,20 @@ f.write('   <title>31 Equal Temperament Interface</title>\n')
 
 class Key:
     # Key gap
-    g = scale_correction * (1.0/16)
+    g = scale_correction * (1.0/32)
 
-    lower_key_count = 16
+    #lower_key_count = 16
 
     # Horizontal key spacing
-    w = octave_length / lower_key_count
+    #w = octave_length / lower_key_count
+    w = key_width
 
     # Length of hex key side
     r3 = math.sqrt(3.0)
     s = w / r3
 
-    n = int(math.floor((total_height - s/2)/(7*s)))
+    #n = int(math.floor((total_height - s/2)/(7*s)))
+    n = 3
 
     #key_height = (total_height - key_gap*2)/2
     # Now total key height is the entire available range, but broken into hexagon segments.
@@ -88,26 +91,30 @@ class Key:
             self.svg_class = 'Natural'
 
         # Calculate the coordinates based on number.
-        lower = (number % 31) % 2 == 0
-        octave = number / 31
-        index = (number % 31) / 2
+        #lower = (number % 31) % 2 == 0
+        lower = number % 2 == 0
+        #octave = number / 31
+        #index = (number % 31) / 2
+        index = number / 2
         if lower:
-            self.x_offset = octave*octave_length + index * Key.w
-            self.y_offset = 4 * Key.s
+            #self.x_offset = octave*octave_length + index * Key.w
+            self.x_offset = index * Key.w
+            self.y_offset = 5.5 * Key.s
         else:
-            self.x_offset = octave*octave_length + Key.w / 2 + index*(Key.w)
+            #self.x_offset = octave*octave_length + Key.w / 2 + index*(Key.w)
+            self.x_offset = Key.w / 2 + index*(Key.w)
             self.y_offset = Key.s/2
 
     def getSvg(self):
         return_string = ''
         for i in range(Key.n):
             x = self.x_offset
-            y = self.y_offset + i*7*Key.s
+            y = self.y_offset + i*10*Key.s
             ax = x + Key.w/2            ; ay = y + Key.g/Key.r3
             bx = x + Key.w - Key.g/2    ; by = y + Key.s/2 + Key.g/Key.r3/2
-            cx = x + Key.w - Key.g/2    ; cy = y + 7*Key.s/2 - Key.g/Key.r3/2
-            dx = x + Key.w/2            ; dy = y + 4*Key.s - Key.g/Key.r3
-            ex = x + Key.g/2            ; ey = y + 7*Key.s/2 - Key.g/Key.r3/2
+            cx = x + Key.w - Key.g/2    ; cy = y + 10*Key.s/2 - Key.g/Key.r3/2
+            dx = x + Key.w/2            ; dy = y + 5.5*Key.s - Key.g/Key.r3
+            ex = x + Key.g/2            ; ey = y + 10*Key.s/2 - Key.g/Key.r3/2
             fx = x + Key.g/2            ; fy = y + Key.s/2 + Key.g/Key.r3/2
             return_string += '<polygon id="%s_%i" class="%s" points="%f,%f %f,%f %f,%f %f,%f %f,%f %f,%f" />\n' %\
               (self.svg_id, i, self.svg_class, ax, ay, bx, by, cx, cy, dx, dy, ex, ey, fx, fy)
